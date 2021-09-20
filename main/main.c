@@ -61,7 +61,7 @@ void play_mp3(const void *mp3, size_t size) {
     bool is_first_frame = true;
 
     while (1) {
-        // デコードする
+        // Decode MP3 to PCM
         short pcm[MINIMP3_MAX_SAMPLES_PER_FRAME];
         int samples = mp3dec_decode_frame(&mp3d, decode_ptr, remain_size, pcm, &info);
         if (info.frame_bytes == 0) break;
@@ -76,7 +76,7 @@ void play_mp3(const void *mp3, size_t size) {
         size_t write_size = sizeof(int16_t) * samples * info.channels;
         int ret = i2s_write(I2S_NUM_SPEAKER, (char *)pcm, write_size, &written, portMAX_DELAY);
         if (ret != ESP_OK || write_size != written) {
-            printf("soundPlayMP3 : i2s_push_sample fail, ret = %d", ret);
+            printf("play_mp3: i2s_write fail, ret = %d", ret);
             break;
         }
 
